@@ -36,11 +36,16 @@ contract authStorage{
         _innit(_name, _wallet);
     }
  
-    function signIn(bytes32 _id) public returns(address) {
-        require(_getWallet(_id) != 0x0000000000000000000000000000000000000000,
-                "ERROR: User does not exist");
-        address walletAddress = _getWallet(_id);
-        return walletAddress;
+     function signIn(bytes32 _id) view private returns(address){ 
+        return (accounts[_id].wallet);
     }
+
+ 
+    // function signIn(bytes32 _id) {
+    //     require(_getWallet(_id) != 0x0000000000000000000000000000000000000000,
+    //             "ERROR: User does not exist");
+    //     address walletAddress = _getWallet(_id);
+    //     return walletAddress;
+    // }
  
 }
