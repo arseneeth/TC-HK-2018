@@ -4,27 +4,29 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/caarlos0/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	// "github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	// "github.com/dgrijalva/jwt-go"
 	// "golang.org/x/crypto/bcrypt"
 
-	auth_storage "github.com/arsenyjin/TC-HK-2018/back-end/contracts/auth-storage"
+	auth_storage "github.com/arsenyjin/TC-HK-2018/smartcontract"
 )
 
 const EXP = 72
 
 type AppConfig struct {
-	Port     string `env:"PORT,required"`
-	Secret   string `env:"SECRET,required"`
-	Key      string `env:"KEY,required"`
-	Node     string `env:"NODE,required"`
-	Symbol   string `env:"SYMBOL,required"`
-	Retainer string `env:"RETAINER,required"`
+	Port        string `env:"PORT,required"`
+	Secret      string `env:"SECRET,required"`
+	Key         string `env:"KEY,required"`
+	Node        string `env:"NODE,required"`
+	AuthStorage string `env:"AUTHSTORAGE,required"`
 }
 
 type User struct {
@@ -32,19 +34,15 @@ type User struct {
 	Wallet string `json:"wallet"`
 }
 
-func home(c echo.Context) error {
-	return c.String(http.StatusOK, "welcome to heike-id")
-}
-
 func register(c echo.Context) error {
-	u := new(User)
-	if err := c.Bind(u); err != nil {
+	user := new(User)
+	if err := c.Bind(user); err != nil {
 		return c.JSON(http.StatusUnprocessableEntity, map[string]string{
 			"error": "invalid json",
 		})
 	}
 
-	if u.Name == "" || u.Wallet == "" {
+	if user.Name == "" || user.Wallet == "" {
 		return c.JSON(http.StatusUnprocessableEntity, map[string]string{
 			"error": "invalid user details",
 		})
@@ -60,30 +58,45 @@ func register(c echo.Context) error {
 		log.Fatalf("unable to connect to network:%v\n", err)
 	}
 
-	auth, err := bind.NewTransactor(strings.NewReader(config.Key), secret)
+	auth, err := bind.NewTransactor(strings.NewReader(config.Key), config.Secret)
 	if err != nil {
 		log.Fatalf("failed to create authorized transactor: %v", err)
 	}
 
-	auth_storage_instance, err := auth_storage.NewHeikeRetainer(common.HexToAddress(config.AuthStorage), blockchain)
+	auth_storage_instance, err := auth_storage.NewAuthStorage(common.HexToAddress(config.AuthStorage), blockchain)
 	if err != nil {
 		log.Fatalf("failed to instantiate a contract: %v", err)
 	}
 
-	// fund retainer
-	fund_res, err := retainer_instance.FundRetainer(&bind.TransactOpts{
+	wallet := common.HexToAddress(user.Wallet)
+	// "DAI" as [32]bytes
+	// symbol := "0x686573"
+	// symbol_hex, _ := hexutil.Decode(symbol)
+	// var token_symbol [32]byte
+	// copy(token_symbol[:], symbol_hex)
+	// name_hex, _ := hexutil.Decode(user.Name)
+	var name [32]byte
+	// copy(name[:], name_hex)
+	copy(name[:], []byte(user.Name))
+
+	log.Println("----------------------")
+	log.Println("name:", name)
+	log.Println("wallet:", wallet)
+	log.Println("----------------------")
+
+	register_res, err := auth_storage_instance.SignUp(&bind.TransactOpts{
 		From:     auth.From,
 		Signer:   auth.Signer,
-		GasLimit: 300000,
-	}, token_symbol, big.NewInt(444))
+		GasLimit: 100000,
+	}, name, wallet)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("fund result:", fund_res)
 
-	return c.JSON(http.StatusOK, "fund")
+	log.Println("register result:", register_res)
 
 	return c.JSON(http.StatusOK, "register - ok")
+
 	// 	return c.JSON(http.StatusConflict, map[string]string{
 	// 		"error": "user exists",
 	// 	})
@@ -141,8 +154,6 @@ func main() {
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
 	}))
 	e.Use(setConfig(config))
-
-	e.GET("/", home)
 
 	api := e.Group("/api/v1")
 	api.POST("/register", register)
