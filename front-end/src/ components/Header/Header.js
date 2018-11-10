@@ -25,7 +25,7 @@ class Header extends Component {
                   <Link to ="/" className="brand-logo center">Heike</Link>
  
                   <ul>
-                      <li><a onClick={this.toggleSearch}><i className="material-icons">search</i></a></li>
+                      <Link to="/account"><li><i className="material-icons">search</i></li></Link>
                   </ul>
  
                   <div className="right">

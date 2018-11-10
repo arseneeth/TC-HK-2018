@@ -1,3 +1,5 @@
+@import '~open-color/open-color';
+
 /* Authentication */
 .auth {
     margin-top: 50px;
@@ -17,13 +19,14 @@
       /* Likely future */
   }
   a.logo {
-      color: #5B5B5B;
+    //   color: #5B5B5B;
+    color: #19aaff;
   }
   a {
       cursor: pointer;
   }
   .auth .card {
-      width: 460px;
+    width:480px;
       margin: 0 auto;
   }
   @media screen and (max-width: 480px) {
@@ -34,6 +37,11 @@
       font-size: 60px;
     }
   }
+  .card .card-content {
+    padding: 20px;
+    border-radius: 0 0 2px 2px;
+    font-size: 1.8rem;
+}
   .auth .header {
       font-size: 18px;
   }
@@ -45,14 +53,21 @@
   }
   .auth .btn {
       width: 90%;
+      height: auto;
+      padding: 15px;
+    font-size: 1.1rem;
   }
   .auth .footer {
       border-top: 1px solid #E9E9E9;
       padding-bottom: 11px;
   }
   .phrase{
-       margin-top: 10px;
+    
       font-size: 1.5rem;
+      padding-top: 70px;
+      padding-bottom: 50px;
+  
+
   }
   .footer.phrase{
       display: flex;
@@ -74,8 +89,43 @@
     width: 45%;
 }
 .phrase_alert{
-    border-bottom: 1px red solid;
-    background: red;
-    font-size: 1.2rem;
+    
+    background: $oc-red-7;
+    color: white;
+    font-size: 1.1rem;
     padding: 1.1rem;
+   
+}
+
+.card.account{
+    width:520px;
+}
+
+button.waves-effect.waves-light.btn.account {
+    width: 45%;
+    margin: 10px;
+    margin-top: 40px;
+}
+
+
+.validate.title{
+    text-align: left;
+    color: $oc-gray-8;
+    font-size: 1.7rem;
+}
+
+.card-content.account {
+    margin: 25px;
+}
+
+input.validate.account {
+    height: 4rem;
+    color: $oc-gray-8;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+}
+
+
+.card-content.multi{
+    margin-top: -80px;
 }

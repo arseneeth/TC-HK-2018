@@ -14,8 +14,11 @@ var mnemonic = lightwallet.keystore.generateRandomSeed(); // should it be const?
 var privateKey = pkutils.getPrivateKeyFromMnemonic(mnemonic);
 var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
 
-console.log("mnemonic: " + mnemonic);
-console.log("keystore: " + keystore);
+// console.log("mnemonic: " + mnemonic);
+// // console.log("keystore: " + keystore);
+// console.log("keystore_pub_key1: " + keystore.address);
+// console.log("privateKey1:" + privateKey);
+
 
 
 
@@ -29,13 +32,21 @@ class Register_2 extends Component {
         }
 
         
-        this.handleSubmit = this.handleSubmit.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
         
     }
 
 
     handleSubmit(e) {
         e.preventDefault();
+var mnemonic = lightwallet.keystore.generateRandomSeed(); // should it be const?
+var privateKey = pkutils.getPrivateKeyFromMnemonic(mnemonic);
+var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
+
+console.log("mnemonic: " + mnemonic);
+// console.log("keystore: " + keystore);
+console.log("keystore_pub_key1: " + keystore.address);
+console.log("privateKey1:" + privateKey);
      
        axios.post('http://10.18.6.99:8888/api/v1/register',{
             name:localStorage.getItem('username'),
@@ -46,17 +57,18 @@ class Register_2 extends Component {
     
     
     .then(function (res) {
-        console.log(res);
-        console.log(res.data);
-        console.log(keystore)
-        const cachedHits_prk = localStorage.setItem("private_key", privateKey);
-        const cachedHits_puk = localStorage.setItem("pub_key", keystore.address); // maybe we will change it later
-        
+        // console.log(res);
+        // console.log(res.data);
+        // console.log(keystore)
+        const cachedHits_prk = localStorage.setItem("private_key2", privateKey);
+        const cachedHits_puk = localStorage.setItem("pub_key2", keystore.address); // maybe we will change it later
+       console.log('private_key2 aftre save:' +  privateKey);
+       console.log('pub_key2 after save:' +  keystore.address);
+
         console.log(localStorage);
         if (cachedHits_prk) {
             this.setState({privateKey : JSON.parse(cachedHits_prk),publicKey:JSON.parse(cachedHits_puk) });
-            console.log("local storage private key :" + cachedHits_prk );
-            console.log("local storage public key :" + cachedHits_puk );
+ 
 
             return;
           }
