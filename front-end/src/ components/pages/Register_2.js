@@ -2,18 +2,17 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import './styles.scss';
 
-
-// const Web3 = require("web3"); //import web3
-// const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545")); //connect to testrpc
+const Web3 = require("web3"); //import web3
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/68129f951c4642c1925917657181237d")); //connect to testrpc
 const lightwallet = require("eth-lightwallet"); //import light wallet for mnemonic phrase
 const  pkutils = require('./lib/pkutils'); //import pkutils for mnemonic to privatekey
 
 var mnemonic = lightwallet.keystore.generateRandomSeed(); // should it be const?
 var privateKey = pkutils.getPrivateKeyFromMnemonic(mnemonic);
-// var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
+var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
 
 console.log("mnemonic: " + mnemonic);
-// console.log("keystore: " + keystore);
+console.log("keystore: " + keystore);
 
 class Register_2 extends Component {
     render() {
@@ -28,7 +27,7 @@ class Register_2 extends Component {
                   <div>
                       {mnemonic}
                       <br/>
-                      {/* {keystore} */}
+                      {/* key store : {keystore} */}
                   </div>
                
               </div>
