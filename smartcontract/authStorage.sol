@@ -22,4 +22,12 @@ contract authStorage{
         ids.push(_name) -1;
     }
  
+     function getAccounts() view public returns(bytes32[]){ // get list of all project's wallets
+        return ids;
+    }
+
+    function getWallet(bytes32 _id) view public returns(address){ // get data for a specific project
+        return (accounts[_id].wallet);
+    }
+ 
 }
