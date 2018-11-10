@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 const Web3 = require("web3"); //import web3
-const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/68129f951c4642c1925917657181237d")); //connect to testrpc
+const web3 = new Web3(new Web3.providers.HttpProvider("http://ropsten.infura.io/v3/68129f951c4642c1925917657181237d")); //connect to testrpc
 const lightwallet = require("eth-lightwallet"); //import light wallet for mnemonic phrase
 const  pkutils = require('./lib/pkutils'); //import pkutils for mnemonic to privatekey
 
@@ -40,17 +40,23 @@ class Login extends Component {
         e.preventDefault();
 
         const message = mnemonic;
-        const pub_key = localStorage.getItem('pub_key');
+        //const pub_key = localStorage.getItem('pub_key');
         const hash = Web3.utils.keccak256(message);
-        console.log("hash:", hash);
+        console.log("hash:",typeof hash);
 
-        const sign_message = web3.eth.sign(message,pub_key);
-        console.log("sign message:", sign_message);
+        const sign_message = web3.eth.accounts.sign(message,localStorage.getItem('private_key'));
+       console.log("sign message:", sign_message);
+
+
+        console.log(this.state.username);
+        console.log(typeof message);
+        console.log(web3.version);
+       
 
     
         axios.post('http://10.18.6.99:8888/api/v1/login',{
             name:this.state.username,
-            message:message,
+            signature:sign_message.signature,
             hash:hash
     })
     

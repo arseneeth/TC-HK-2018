@@ -74,6 +74,7 @@ class Register_2 extends Component {
                   <div className="header blue white-text center">
                       <div className="card-content">12 Words Phrase</div>
                   </div>
+                  <div className="phrase_alert">Please write down your mnemonic phrase, it is the only way to recover your account</div>
                   <div className="phrase">
                       {mnemonic}
                       <br/>
