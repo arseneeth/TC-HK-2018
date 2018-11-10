@@ -22,7 +22,7 @@ class Register_2 extends Component {
         super();
 
         // this.state = {
-        // name:localStorage.username,
+        // name:localStorage.username,`
         // wallet:keystore
            
         // }
@@ -36,11 +36,10 @@ class Register_2 extends Component {
         e.preventDefault();
         
        console.log('The form was submitted with the following data:');
-      
-
+     
        axios.post('http://10.18.6.99:8888/api/v1/register',{
-            name:'joy',
-            wallet:'0xa3b65Ba11F77F4B53A691fd722373D038418cDCE'
+            name:localStorage.getItem('username'),
+            wallet:keystore.address
             // need to add more data to send to the server
     
     })
