@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 
 class Account extends Component {
+    
+
     render() {
+
         return (
             <div>
             <div className="container auth">
@@ -23,7 +26,7 @@ class Account extends Component {
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder="Joy"
+                placeholder={username}
                />
             </div>
             <div className="input-field col s12 username">
@@ -33,7 +36,7 @@ class Account extends Component {
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder="0x9820834848204832408"
+                placeholder={publicKey}
                />
             </div>
            

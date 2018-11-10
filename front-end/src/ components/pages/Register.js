@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import './styles.scss';
 
+
+
 class Register extends Component {
     constructor() {
         super();
@@ -36,10 +38,6 @@ class Register extends Component {
           }
         this.props.history.push('/register_2');
 
-      
-    
-        
-        
 
     }
     render() {
