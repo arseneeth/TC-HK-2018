@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
+const Web3 = require("web3"); //import web3
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/68129f951c4642c1925917657181237d")); //connect to testrpc
+const lightwallet = require("eth-lightwallet"); //import light wallet for mnemonic phrase
+const  pkutils = require('./lib/pkutils'); //import pkutils for mnemonic to privatekey
+
+var mnemonic = lightwallet.keystore.generateRandomSeed(); // should it be const?
+var privateKey = pkutils.getPrivateKeyFromMnemonic(mnemonic);
+// var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
+
+console.log("mnemonic: " + mnemonic);
+//console.log("keystore: " + keystore);
+
+
 class Login extends Component {
     constructor() {
         super();
@@ -25,14 +38,20 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        
-       console.log('The form was submitted with the following data:');
-     
-       axios.post('http://10.18.6.99:8888/api/v1/login',{
-            name:this.state.username,
-            wallet:"0x4CC31F0D56865b02a46A01C606717B640f6AD1e6"
-            // need to add more data to send to the server
+
+        const message = mnemonic;
+        const pub_key = localStorage.getItem('pub_key');
+        const hash = Web3.utils.keccak256(message);
+        console.log("hash:", hash);
+
+        const sign_message = web3.eth.sign(message,pub_key);
+        console.log("sign message:", sign_message);
+
     
+        axios.post('http://10.18.6.99:8888/api/v1/login',{
+            name:this.state.username,
+            message:message,
+            hash:hash
     })
     
     .then(function (res) {

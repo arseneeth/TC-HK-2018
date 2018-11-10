@@ -34,8 +34,6 @@ class Register_2 extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        
-       console.log('The form was submitted with the following data:');
      
        axios.post('http://10.18.6.99:8888/api/v1/register',{
             name:localStorage.getItem('username'),
@@ -46,18 +44,24 @@ class Register_2 extends Component {
     
     
     .then(function (res) {
+        console.log(res);
+        console.log(res.data);
+        console.log(keystore)
+        const cachedHits_prk = localStorage.setItem("private_key", privateKey);
+        const cachedHits_puk = localStorage.setItem("pub_key", keystore.address); // maybe we will change it later
         
-        if(res.data === 'ok'){
-            console.log("success");
-            
-        }
+        console.log(localStorage);
+        if (cachedHits_prk) {
+            this.setState({privateKey : JSON.parse(cachedHits_prk),publicKey:JSON.parse(cachedHits_puk) });
+            console.log("local storage private key :" + cachedHits_prk );
+            console.log("local storage public key :" + cachedHits_puk );
+
+            return;
+          }
+        
+        
       })
-      .catch(function (error,data) {
-        console.log(error);
-        console.log('unauthorized, logging out ...');
-        console.log(data);
-       
-      })
+      
 
     }
     render() {
