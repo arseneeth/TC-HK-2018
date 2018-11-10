@@ -9,17 +9,12 @@ import (
 	"github.com/caarlos0/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
-	// "github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	// "github.com/dgrijalva/jwt-go"
-	// "golang.org/x/crypto/bcrypt"
 
 	auth_storage "github.com/arsenyjin/TC-HK-2018/smartcontract"
 )
-
-const EXP = 72
 
 type AppConfig struct {
 	Port        string `env:"PORT,required"`
@@ -27,6 +22,7 @@ type AppConfig struct {
 	Key         string `env:"KEY,required"`
 	Node        string `env:"NODE,required"`
 	AuthStorage string `env:"AUTHSTORAGE,required"`
+	Gas         uint64 `env:"GAS,required"`
 }
 
 type User struct {
@@ -69,56 +65,63 @@ func register(c echo.Context) error {
 	}
 
 	wallet := common.HexToAddress(user.Wallet)
-	// "DAI" as [32]bytes
-	// symbol := "0x686573"
-	// symbol_hex, _ := hexutil.Decode(symbol)
-	// var token_symbol [32]byte
-	// copy(token_symbol[:], symbol_hex)
-	// name_hex, _ := hexutil.Decode(user.Name)
 	var name [32]byte
-	// copy(name[:], name_hex)
 	copy(name[:], []byte(user.Name))
 
-	log.Println("----------------------")
-	log.Println("name:", name)
-	log.Println("wallet:", wallet)
-	log.Println("----------------------")
-
-	register_res, err := auth_storage_instance.SignUp(&bind.TransactOpts{
+	tx, err := auth_storage_instance.SignUp(&bind.TransactOpts{
 		From:     auth.From,
 		Signer:   auth.Signer,
-		GasLimit: 100000,
+		GasLimit: config.Gas,
 	}, name, wallet)
 	if err != nil {
-		log.Fatal(err)
+		return c.JSON(http.StatusConflict, map[string]string{
+			"error": err.Error(),
+		})
 	}
 
-	log.Println("register result:", register_res)
-
-	return c.JSON(http.StatusOK, "register - ok")
-
-	// 	return c.JSON(http.StatusConflict, map[string]string{
-	// 		"error": "user exists",
-	// 	})
+	return c.JSON(http.StatusOK, tx.Hash().Hex())
 }
 
 func login(c echo.Context) error {
-	u := new(User)
-	if err := c.Bind(u); err != nil {
+	user := new(User)
+	if err := c.Bind(user); err != nil {
 		return c.JSON(http.StatusUnprocessableEntity, map[string]string{
 			"error": "invalid json",
 		})
 	}
 
-	if u.Name == "" || u.Wallet == "" {
+	if user.Name == "" || user.Wallet == "" {
 		return c.JSON(http.StatusUnprocessableEntity, map[string]string{
 			"error": "invalid user details",
 		})
 	}
 
-	log.Println(u)
+	config, err := getConfig(c)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	return c.JSON(http.StatusOK, "login - ok")
+	blockchain, err := ethclient.Dial(config.Node)
+	if err != nil {
+		log.Fatalf("unable to connect to network:%v\n", err)
+	}
+
+	auth_storage_instance, err := auth_storage.NewAuthStorage(common.HexToAddress(config.AuthStorage), blockchain)
+	if err != nil {
+		log.Fatalf("failed to instantiate a contract: %v", err)
+	}
+
+	var name [32]byte
+	copy(name[:], []byte(user.Name))
+
+	wallet_hex, err := auth_storage_instance.TestSignIn(&bind.CallOpts{}, name)
+	if err != nil {
+		return c.JSON(http.StatusConflict, map[string]string{
+			"error": err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, wallet_hex.Hex())
 }
 
 func getConfig(c echo.Context) (*AppConfig, error) {
@@ -158,10 +161,6 @@ func main() {
 	api := e.Group("/api/v1")
 	api.POST("/register", register)
 	api.POST("/login", login)
-
-	// user := api.Group("/user")
-	// user.Use(middleware.JWT([]byte(secret)))
-	// user.GET("/account", account)
 
 	e.Logger.Fatal(e.Start(":" + config.Port))
 }

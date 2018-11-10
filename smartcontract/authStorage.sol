@@ -39,4 +39,12 @@ contract authStorage{
         return (accounts[_id].wallet);
     }
 
+     function testSignIn(bytes32 _id) view public returns(address){ 
+//       require(accounts[_id].wallet != 0x0000000000000000000000000000000000000000,
+//       "ERROR: User does not exist");
+
+        return (accounts[_id].wallet);
+    }
+
+
 }
