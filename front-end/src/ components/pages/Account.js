@@ -1,5 +1,25 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+const lightwallet = require("eth-lightwallet"); //import light wallet for mnemonic phrase
+
+
+const username = localStorage.getItem('username');
+const publicKey = localStorage.getItem('public_key');
+
+
+const bitcoin = require('bitcoinjs-lib');
+
+var mnemonic = lightwallet.keystore.generateRandomSeed(); 
+
+const hash = bitcoin.crypto.sha256(Buffer.from(mnemonic));
+
+const keys = bitcoin.ECPair.fromPrivateKey(hash);
+
+const { address } = bitcoin.payments.p2pkh({ pubkey: keys.publicKey })
+
+const wif = keys.toWIF()
+console.log("address:",  address);
+console.log("wif:"+wif);
 
 class Account extends Component {
     
