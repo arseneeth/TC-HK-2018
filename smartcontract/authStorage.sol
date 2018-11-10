@@ -13,7 +13,7 @@ contract authStorage{
 
     bytes32[] public ids;
 
-    function signUp(bytes32 _name, address _wallet) public { 
+    function register(bytes32 _name, address _wallet) public { 
         Account storage account = accounts[_name];
         
         // account.id = _id;
@@ -22,11 +22,11 @@ contract authStorage{
         ids.push(_name) -1;
     }
  
-     function getAccounts() view public returns(bytes32[]){ // get list of all project's wallets
+     function getAccounts() view public returns(bytes32[]){ 
         return ids;
     }
 
-    function getWallet(bytes32 _id) view public returns(address){ // get data for a specific project
+    function login(bytes32 _id) view public returns(address){ 
         return (accounts[_id].wallet);
     }
  
