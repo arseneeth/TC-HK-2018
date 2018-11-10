@@ -13,6 +13,7 @@ class Register extends Component {
                       <div className="card-content">Register</div>
                   </div>
                   <div className="card-content">
+                  <form></form>
                 <div className="row">
                 <div>
                 <div className="input-field col s12 username">
@@ -22,9 +23,8 @@ class Register extends Component {
                     type="text"
                     className="validate"/>
                 </div>
-                
             </div>
-                    <Link to='/register' className="waves-effect waves-light btn">CREATE</Link> 
+                    <Link to='/register_2' className="waves-effect waves-light btn">CREATE</Link> 
                 </div>
             </div>
               </div>
