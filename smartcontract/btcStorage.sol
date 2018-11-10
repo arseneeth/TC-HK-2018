@@ -17,14 +17,19 @@ contract bitcoinStorage {
              require(auth_storage.testSignIn(_id) != 0x0000000000000000000000000000000000000000,
                 "ERROR: User does not exist");
 
-            
             btcWallet storage btc_wallet = btc_wallets[_id];
 
             btc_wallet.pub_hashed = _pub;
             btc_wallet.wif_hashed = _wif;
-            
     }
 
+    function getPub(bytes32 _id) view public returns(bytes32){ 
+        return (btc_wallets[_id].pub_hashed);
+    }
+
+    function getWif(bytes32 _id) view public returns(bytes32){ 
+        return (btc_wallets[_id].wif_hashed);
+    }
 
     
 }
