@@ -3,9 +3,6 @@ pragma solidity ^0.4.24;
 contract authStorage{
     
     struct Account{
-        
-        // bytes32 name;
-        // bytes32 id;
         address wallet;
     }
     
@@ -16,7 +13,6 @@ contract authStorage{
     function _innit(bytes32 _name, address _wallet) private { 
         Account storage account = accounts[_name];
         
-        // account.id = _id;
         account.wallet = _wallet;
         
         ids.push(_name) -1;
@@ -36,16 +32,11 @@ contract authStorage{
         _innit(_name, _wallet);
     }
  
-     function signIn(bytes32 _id) view private returns(address){ 
+     function signIn(bytes32 _id) view public returns(address){ 
+       require(accounts[_id].wallet != 0x0000000000000000000000000000000000000000,
+       "ERROR: User does not exist");
+
         return (accounts[_id].wallet);
     }
 
- 
-    // function signIn(bytes32 _id) {
-    //     require(_getWallet(_id) != 0x0000000000000000000000000000000000000000,
-    //             "ERROR: User does not exist");
-    //     address walletAddress = _getWallet(_id);
-    //     return walletAddress;
-    // }
- 
 }
