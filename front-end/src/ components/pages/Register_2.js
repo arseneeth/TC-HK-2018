@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import './styles.scss';
 import axios from 'axios';
 
+import {C2C} from 'react-c2c';
+
 const Web3 = require("web3"); //import web3
 const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/68129f951c4642c1925917657181237d")); //connect to testrpc
 const lightwallet = require("eth-lightwallet"); //import light wallet for mnemonic phrase
@@ -21,14 +23,14 @@ class Register_2 extends Component {
     constructor() {
         super();
 
-        // this.state = {
-        // name:localStorage.username,`
-        // wallet:keystore
-           
-        // }
+        this.state = {
+            mnemonic:mnemonic,
+            copied: false
+        }
 
         
         this.handleSubmit = this.handleSubmit.bind(this);
+        
     }
 
 
@@ -81,7 +83,14 @@ class Register_2 extends Component {
                       {/* key store : {keystore} */}
                   </div>
                   <div className="footer phrase">
-                  <Link to='/' className="waves-effect waves-light btn phrase">Copy Phrase</Link>
+                  <C2C
+                    text={this.state.mnemonic}
+                    render={({ copied, handleClick }) => copied
+                  ? <button className="waves-effect waves-light btn phrase">Copied !</button>
+                  : <button className="waves-effect waves-light btn phrase" onClick={handleClick}>Copy to clipboard</button>}
+                     />
+                   
+                  {/* <Link to='/' className="waves-effect waves-light btn phrase">Copy Phrase</Link> */}
                   <button type="submit" className="waves-effect waves-light btn phrase">Done</button>
                   </div>
                   </form>

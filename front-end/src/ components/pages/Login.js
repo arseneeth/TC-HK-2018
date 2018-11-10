@@ -42,14 +42,14 @@ class Login extends Component {
         const message = mnemonic;
         //const pub_key = localStorage.getItem('pub_key');
         const hash = Web3.utils.keccak256(message);
-        console.log("hash:",typeof hash);
+        console.log("hash:", hash);
 
         const sign_message = web3.eth.accounts.sign(message,localStorage.getItem('private_key'));
        console.log("sign message:", sign_message);
 
 
         console.log(this.state.username);
-        console.log(typeof message);
+        console.log(message);
         console.log(web3.version);
        
 

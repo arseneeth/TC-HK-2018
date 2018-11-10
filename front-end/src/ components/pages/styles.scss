@@ -23,7 +23,7 @@
       cursor: pointer;
   }
   .auth .card {
-      width: 400px;
+      width: 460px;
       margin: 0 auto;
   }
   @media screen and (max-width: 480px) {
@@ -77,4 +77,5 @@
     border-bottom: 1px red solid;
     background: red;
     font-size: 1.2rem;
+    padding: 1.1rem;
 }
