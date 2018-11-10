@@ -11,6 +11,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/labstack/echo"
@@ -107,8 +108,6 @@ func login(c echo.Context) error {
 		})
 	}
 
-	log.Println("login_user:", login_user)
-
 	config, err := getConfig(c)
 	if err != nil {
 		log.Fatal(err)
@@ -134,23 +133,25 @@ func login(c echo.Context) error {
 		})
 	}
 
-	//---------------------------------------------------
-	// publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
-	// data := []byte("hello")
-	// hash := crypto.Keccak256Hash(data)
-	// fmt.Println(hash.Hex()) // 0x1c8aff950685c2ed4bc3174f3472287b56d9517b9c948127319a09a7a36deac8
-	//
-	// sigPublicKey, err := crypto.Ecrecover(hash.Bytes(), signature)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//
-	// matches := bytes.Equal(sigPublicKey, publicKeyBytes)
-	// fmt.Println(matches) // true
-	//---------------------------------------------------
+	// addrBytes := []byte{20, 123, 142, 185, 127, 210, 71, 208, 108, 64, 6, 210, 105, 201, 12, 25, 8, 251, 93, 84}
+	// fmt.Println(hexutil.Encode(addrBytes)) // 0x147B8eb97fD247D06C4006D269c90C1908Fb5D54
 
-	signatureWithNoRecoverID := login_user.Signature[:len(login_user.Signature)-1] // remove recovery ID
-	verified := crypto.VerifySignature(wallet_hex.Bytes(), []byte(login_user.Hash), []byte(signatureWithNoRecoverID))
+	// addrHex, _ := hexutil.Decode("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
+	// fmt.Println(addrHex) // [20 123 142 185 127 210 71 208 108 64 6 210 105 201 12 25 8 251 93 84]
+
+	signature := []byte(login_user.Signature)
+	publicKeyBytes, _ := hexutil.Decode(string(wallet_hex.Bytes()))
+	hash := []byte(login_user.Hash)
+
+	// addrBytes := []byte{20, 123, 142, 185, 127, 210, 71, 208, 108, 64, 6, 210, 105, 201, 12, 25, 8, 251, 93, 84}
+	// fmt.Println(hexutil.Encode(addrBytes)) // 0x147B8eb97fD247D06C4006D269c90C1908Fb5D54
+
+	// addrHex, _ := hexutil.Decode("0x147B8eb97fD247D06C4006D269c90C1908Fb5D54")
+	// fmt.Println(addrHex) // [20 123 142 185 127 210 71 208 108 64 6 210 105 201 12 25 8 251 93 84]
+
+	signatureNoRecoverID := signature[:len(signature)-1]
+	// verified := crypto.VerifySignature(publicKeyBytes, hash.Bytes(), signatureNoRecoverID)
+	verified := crypto.VerifySignature(publicKeyBytes, []byte(hash), signatureNoRecoverID)
 	if !verified {
 		return c.JSON(http.StatusUnauthorized, map[string]string{
 			"error": "unauthorized",
@@ -214,9 +215,9 @@ func main() {
 	api_v1.POST("/register", register)
 	api_v1.POST("/login", login)
 
-	users := api_v1.Group("/users")
-	users.Use(middleware.JWT([]byte(config.Secret)))
-	users.GET("/account", restricted)
+	// users := api_v1.Group("/users")
+	// users.Use(middleware.JWT([]byte(config.Secret)))
+	// users.GET("/account", restricted)
 
 	e.Logger.Fatal(e.Start(":" + config.Port))
 }
