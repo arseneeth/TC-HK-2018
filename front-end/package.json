@@ -3,17 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "bip39": "^2.5.0",
+    "eth-lightwallet": "^3.0.1",
+    "ethereumjs-wallet": "^0.6.0",
+    "keythereum": "^1.0.3",
     "node-sass": "^4.10.0",
     "open-color": "^1.6.3",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
-    "eth-lightwallet": "^3.0.1",
-    "web3": "1.0.0-beta.34",
-    "bip39": "^2.5.0",
-    "ethereumjs-wallet": "^0.6.0",
-    "keythereum": "^1.0.3"
+    "web3": "1.0.0-beta.34"
   },
   "scripts": {
     "start": "react-scripts start",

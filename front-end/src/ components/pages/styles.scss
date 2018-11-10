@@ -48,6 +48,24 @@
   }
   .auth .footer {
       border-top: 1px solid #E9E9E9;
-      padding-bottom: 21px;
+      padding-bottom: 11px;
   }
-  
+  .phrase{
+       margin-top: 10px;
+      font-size: 1.5rem;
+  }
+  .footer.phrase{
+      display: flex;
+      justify-content: space-around;
+      border-top:none;
+      padding-top: 21px;
+       
+  }
+  a.waves-effect.waves-light.btn.phrase{
+      width: 44%;
+      display: flex;
+      justify-content: space-around;
+      font-size: 1.2rem;
+
+      
+  }  
