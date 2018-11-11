@@ -22,7 +22,7 @@ class Header extends Component {
         <div>
           <nav>
               <div className="nav-wrapper blue darken-1">
-                  <Link to ="/" className="brand-logo center">Heike</Link>
+                  <Link to ="/login" className="brand-logo center">Heike</Link>
  
                   <ul>
                       <Link to="/account"><li><i className="material-icons">search</i></li></Link>

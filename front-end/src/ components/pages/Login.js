@@ -19,7 +19,7 @@ class Login extends Component {
         super();
 
         this.state = {
-           username:''
+           username:localStorage.getItem("username")
            
         }
 
@@ -37,14 +37,16 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const message = "message";
-        console.log("username:"+this.state.username);
+
+        localStorage.setItem('username',this.state.username);
+        // const message = "message";
+        // console.log("username:"+this.state.username);
 
         // const message = mnemonic;
         //const pub_key = localStorage.getItem('pub_key');
-        const hash = Web3.utils.keccak256(message);
+        // const hash = Web3.utils.keccak256(message);
 
-        const sign_message = web3.eth.accounts.sign(message,localStorage.getItem('private_key'));
+        // const sign_message = web3.eth.accounts.sign(message,localStorage.getItem('private_key'));
         // console.log('private_key2_from login:' + localStorage.getItem('private_key2'));
         
         // const address = web3.eth.accounts.recover(sign_message);
@@ -61,22 +63,25 @@ class Login extends Component {
         // console.log(message);
         // console.log(web3.version);
 
-     console.log(typeof sign_message);
-        axios.post('http://10.18.6.99:8888/api/v1/login',{
-            name:this.state.username,
-            signature:JSON.stringify(sign_message),
-            hash:hash
+    //  console.log(typeof sign_message);
+
+     
+
+    //     axios.post('http://10.18.6.99:8888/api/v1/login',{
+    //         name:this.state.username,
+    //         signature:JSON.stringify(sign_message),
+    //         hash:hash
 
             
 
-    })   
-    .then(function (res) {
-        console.log(res);
-        console.log(res.data);
+    // })   
+    // .then(function (res) {
+    //     console.log(res);
+    //     console.log(res.data);
       
 
         
-      })
+    //   })
       
 
     }
@@ -85,7 +90,7 @@ class Login extends Component {
             <div>
             <div className="container auth">
           <Link className="logo" to="/">Heike</Link>
-          <form onSubmit={this.handleSubmit} >
+          <form onSubmit={this.handleSubmit} method=''>
           <div className="card">
               <div className="header blue white-text center">
                   <div className="card-content">Login</div>
@@ -105,8 +110,8 @@ class Login extends Component {
             </div>
            
         </div>
-        {/* <Link to='/account'><button type="submit" className="waves-effect waves-light btn">Login</button> </Link> */}
-        <button type="submit" className="waves-effect waves-light btn">Login</button>
+        <Link to='/account'><button type="submit" className="waves-effect waves-light btn">Login</button> </Link>
+        {/* <button type="submit" className="waves-effect waves-light btn">Login</button> */}
 
             </div>
         </div>

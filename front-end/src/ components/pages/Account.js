@@ -21,9 +21,11 @@ const wif = keys.toWIF()
 console.log("address:",  address);
 console.log("wif:"+wif);
 
+localStorage.setItem('btc_wallet',address);
+
 class Account extends Component {
     
-
+  
     render() {
 
         return (
@@ -46,17 +48,17 @@ class Account extends Component {
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder={username}
+                placeholder={localStorage.getItem('username')}
                />
             </div>
             <div className="input-field col s12 username">
-            <div className="validate title">Your Wallet Address
+            <div className="validate title">Your ETH Wallet Address
                 </div>
                 <input
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder={publicKey}
+                placeholder={localStorage.getItem('public_key')}
                />
             </div>
            
@@ -68,7 +70,7 @@ class Account extends Component {
           <div className="card-content account">
             <div className="row">
         
-        <button type="submit" className="waves-effect waves-light btn account">Create BTC Wallet</button> 
+        <Link to="/multi_wallet"><button onClick={this.handleClick} className="waves-effect waves-light btn account">Create BTC Wallet</button> </Link>
         <button type="submit" className="waves-effect waves-light btn account">Send ETH</button> 
 
             </div>

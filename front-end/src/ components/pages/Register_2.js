@@ -46,7 +46,7 @@ var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
     
     
     .then(function (res) {
-        this.props.history.push('/login');
+        // this.props.history.push('/login');
 
         localStorage.setItem("private_key", privateKey);
         localStorage.setItem("public_key", keystore.address);
@@ -80,8 +80,8 @@ var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
                   : <button className="waves-effect waves-light btn phrase" onClick={handleClick}>Copy to clipboard</button>}
                      />
                    
-                  {/* <Link to='/' className="waves-effect waves-light btn phrase">Copy Phrase</Link> */}
-                  <button type="submit" className="waves-effect waves-light btn phrase">Done</button>
+                  <Link to='/account' className="waves-effect waves-light btn phrase">Done</Link>
+                  {/* <button type="submit" className="waves-effect waves-light btn phrase">Done</button> */}
                   </div>
                   </form>
               </div>

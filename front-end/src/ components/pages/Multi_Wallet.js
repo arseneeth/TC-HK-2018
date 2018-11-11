@@ -23,7 +23,7 @@ class Multi_Wallet extends Component {
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder="Joy"
+                placeholder={localStorage.getItem('username')}
                />
             </div>
             <div className="input-field col s12 username">
@@ -33,7 +33,7 @@ class Multi_Wallet extends Component {
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder="0x9820834848204832408"
+                placeholder={localStorage.getItem('public_key')}
                />
             </div>
             <div className="input-field col s12 username">
@@ -43,7 +43,7 @@ class Multi_Wallet extends Component {
                 name="username"
                 type="text"
                 className="validate account"
-                placeholder="0x9820834848204832408"
+                placeholder={localStorage.getItem('btc_wallet')}
                />
             </div>
            
