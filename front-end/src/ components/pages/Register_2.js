@@ -46,19 +46,7 @@ var keystore = web3.eth.accounts.privateKeyToAccount(privateKey);
     
     
     .then(function (res) {
-        // console.log(res);
-        // console.log(res.data);
-        // console.log(keystore)
-    //     const cachedHits_prk = localStorage.setItem("private_key2", privateKey);
-    //     const cachedHits_puk = localStorage.setItem("pub_key2", keystore.address); // maybe we will change it later
-    //    console.log('private_key2 aftre save:' +  privateKey);
-    //    console.log('pub_key2 after save:' +  keystore.address);
-
-        // console.log(localStorage);
-        // if (cachedHits_prk) {
-        //     this.setState({privateKey : JSON.parse(cachedHits_prk),publicKey:JSON.parse(cachedHits_puk) });
-        //     return;
-        //   }
+        this.props.history.push('/login');
 
         localStorage.setItem("private_key", privateKey);
         localStorage.setItem("public_key", keystore.address);
